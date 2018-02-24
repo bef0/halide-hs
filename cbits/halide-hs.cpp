@@ -1,11 +1,6 @@
 // The only Halide header file you need is Halide.h. It includes all of Halide.
 #include "Halide.h"
 
-// We'll also include stdio for printf.
-#include <stdio.h>
-
-/* typedef void CFunc; */
-
 using namespace Halide;
 
 // Turn a pointer of argument points (from haskell) into a vector of
@@ -36,7 +31,7 @@ void delete_param_uint16(Param<uint16_t>* p) { delete p; }
 void delete_param_uint32(Param<uint32_t>* p) { delete p; }
 void delete_param_uint64(Param<uint64_t>* p) { delete p; }
 void delete_param_float(Param<float>* p) { delete p; }
-void delete_param_double(Param<float>* p) { delete p; }
+void delete_param_double(Param<double>* p) { delete p; }
 
 ImageParam* new_image_param(halide_type_t ty, int dim, char* name) {
   ImageParam* img = new ImageParam(ty, dim, name);

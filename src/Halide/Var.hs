@@ -1,17 +1,19 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE ViewPatterns #-}
-{-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE OverloadedLabels #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedLabels      #-}
+{-# LANGUAGE QuasiQuotes           #-}
+{-# LANGUAGE ScopedTypeVariables   #-}
+{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE TypeApplications      #-}
 module Halide.Var where
 
-import GHC.OverloadedLabels
-import GHC.TypeLits
-import Data.Coerce
-import Language.C.Inline.Cpp as C
-import Foreign
-import Foreign.C
+import           Data.Coerce
+import           Data.Proxy
+import           Foreign
+import           Foreign.C
+import           GHC.OverloadedLabels
+import           GHC.TypeLits
+import           Language.C.Inline.Cpp as C
 
 context cppCtx -- (halideCtx <> fptrCtx <> bufferCtx)
 
@@ -31,7 +33,7 @@ newtype Var = Var String
   deriving (Show, Eq, Ord)
 
 instance KnownSymbol x => IsLabel x Var where
-  fromLabel = coerce symbolVal'
+  fromLabel = coerce (symbolVal (Proxy @ x))
 
 newVar :: Var -> IO (ForeignPtr Var)
 newVar (Var x) = withCString x $ \cptr -> do

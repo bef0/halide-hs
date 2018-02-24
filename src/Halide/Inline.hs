@@ -27,6 +27,7 @@ import           Language.C.Inline.HaskellIdentifier
 import qualified Language.C.Types                    as C
 import           Language.Haskell.TH                 (Exp, Q, Type)
 import qualified Language.Haskell.TH                 as TH
+import qualified Language.Haskell.TH.Syntax          as TH
 
 import           Halide.Buffer
 import           Halide.Func
@@ -66,6 +67,7 @@ tyName s = C.TypeName nm where
 cppCtx :: Context
 cppCtx = baseCtx <> mempty
   { ctxFileExtension = Just "cpp"
+  -- { ctxForeignSrcLang = Just TH.LangCxx
   , ctxOutput        = Just $ \s -> concat ["extern \"C\" {\n", s ,"}"]
   , ctxTypesTable    = M.fromList
       [ (C.Double, [t|Double|])

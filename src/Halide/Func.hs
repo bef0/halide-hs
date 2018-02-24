@@ -149,19 +149,30 @@ toFile func path args name target =
   withTarget target $ \targetPtr ->
     to_file funcPtr pathPtr n argPtr namePtr targetPtr
 
--- foreign import ccall "to_object"
---   to_object
---     :: Ptr Func
---     -> CString
---     -> Int
---     -> Ptr (Ptr Argument)
---     -> IO ()
+foreign import ccall "to_object"
+  to_object
+    :: Ptr Func
+    -> CString
+    -> CInt
+    -> Ptr (Ptr Argument)
+    -> CString
+    -> Ptr Target
+    -> IO ()
 
--- toObject :: Function f a -> FilePath -> [Arg] -> IO ()
--- toObject f path args =
---   withCString path $ \pathPtr ->
---     withArgs args $ \argPtr ->
---       to_object f pathPtr argPtr
+toObject
+  :: Function f a -- ^ function to aot compile
+  -> FilePath -- ^ name of file
+  -> [Arg] -- ^ arguments of function
+  -> String -- ^ aot name of function (leave blank to use use function's initialised name)
+  -> Target -- ^ target to compile for
+  -> IO ()
+toObject func path args name target =
+  withFunction func $ \funcPtr ->
+  withCString path $ \pathPtr ->
+  withArgs args $ \n argPtr ->
+  withCString name $ \namePtr ->
+  withTarget target $ \targetPtr ->
+    to_object funcPtr pathPtr n argPtr namePtr targetPtr
 
 foreign import ccall "to_bitcode"
   to_bitcode
